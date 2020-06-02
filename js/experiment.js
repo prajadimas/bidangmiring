@@ -89,7 +89,9 @@ $(document).ready(function () {
           name: "Draw regression",
           icon: Plotly.Icons["drawline"],
           click: function (gd) {
-            // console.log(gd);
+            regX = [];
+            regY = [];
+            console.log(gd);
             if ($(".btn-core.active span").html().toLowerCase() == "linear") {
               plotName += "linear_";
               var result = regression.linear(dataRegXY);
@@ -120,13 +122,36 @@ $(document).ready(function () {
 				        align: "right"
 				      }
 				    });
-            Plotly.addTraces(gd, {
-              x: regX,
-              y: regY,
-              mode: 'lines',
-              type: 'scatter',
-              name: 'Regression'
-            });
+            if (regClicked > 0) {
+              if (gd.data.length > 1) {
+                Plotly.deleteTraces(gd, [-1]);
+                Plotly.addTraces(gd, {
+                  x: regX,
+                  y: regY,
+                  mode: 'lines',
+                  type: 'scatter',
+                  name: 'Regression'
+                });
+              } else {
+                Plotly.addTraces(gd, {
+                  x: regX,
+                  y: regY,
+                  mode: 'lines',
+                  type: 'scatter',
+                  name: 'Regression'
+                });
+              }
+              // Plotly.deleteTraces(gd, [-1]);
+            } else {
+              Plotly.addTraces(gd, {
+                x: regX,
+                y: regY,
+                mode: 'lines',
+                type: 'scatter',
+                name: 'Regression'
+              });
+              regClicked++
+            }
           }
         }]
       };
